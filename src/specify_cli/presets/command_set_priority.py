@@ -59,9 +59,8 @@ def preset_set_priority(
     # Update priority
     manager.registry.update(preset_id, {"priority": priority})
 
-    # A priority change can change the winning command or skill layer just as
-    # install and removal do, so rematerialize artifacts provided by this
-    # preset from the full priority stack.
+    # A priority change can change the winning command layer, so refresh the
+    # generated command files from the full priority stack.
     try:
         from ._manifest import PresetManifest
 
@@ -73,7 +72,6 @@ def preset_set_priority(
         ]
         if command_names:
             manager._reconcile_composed_commands(command_names)
-            manager._reconcile_skills(command_names)
     except Exception as exc:  # noqa: BLE001 - lifecycle reconciliation is best-effort
         import warnings
 
